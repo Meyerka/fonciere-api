@@ -1,16 +1,15 @@
 import express = require('express');
 import { ApolloServer, gql } from 'apollo-server-express';
+import mongoose = require('mongoose');
 require('dotenv').config();
-import { MongoClient } from 'mongodb';
+
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.dtbk6.mongodb.net/fonciere?retryWrites=true&w=majority`;
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  console.log(err);
-  client.close();
-});
+const db = mongoose.connection;
+db.on('error', (error) => console.log(error));
+db.once('open', () => console.log('connection to DB established'));
 
 const typeDefs = gql`
   type Query {
