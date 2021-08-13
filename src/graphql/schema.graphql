@@ -1,0 +1,25 @@
+type Sale {
+  _ID: ID!
+  typeOfItem: String!
+  price: Int!
+  location: String!
+}
+
+input SaleInput {
+  typeOfItem: String!
+  price: Int!
+  location: String!
+}
+
+type Query {
+  sales: [Sale!]
+}
+
+type Mutation {
+  createSale(sale: SaleInput): Sale
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

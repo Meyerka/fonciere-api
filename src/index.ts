@@ -1,6 +1,10 @@
 import express = require('express');
 import { ApolloServer, gql } from 'apollo-server-express';
 import mongoose = require('mongoose');
+import { makeExecutableSchema } from 'graphql-tools';
+import schema from './graphql/schema';
+
+
 require('dotenv').config();
 
 
@@ -11,20 +15,8 @@ const db = mongoose.connection;
 db.on('error', (error) => console.log(error));
 db.once('open', () => console.log('connection to DB established'));
 
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
 
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!',
-  },
-};
-
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({schema});
 
 const app = express();
 app.use(express.json())
